@@ -29,7 +29,12 @@ namespace Identitydatabase
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
+            services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
+                    options.InstanceName = "SampleInstance";
+                });
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
